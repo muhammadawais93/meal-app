@@ -2,14 +2,26 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryMealsScreen from '../screens/CategoryMealsScreen';
 import MealDetailScreen from '../screens/MealDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
+import FiltersScreen from '../screens/FiltersScreen';
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
+const defaultNavStackOption = {
+    headerStyle: {
+        backgroundColor: Colors.primaryColor,
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+        fontWeight: 'bold',
+    },
+}
 const MealsNavigator = createStackNavigator(
     {
         Categories: CategoriesScreen,
@@ -19,15 +31,17 @@ const MealsNavigator = createStackNavigator(
         MealDetail: MealDetailScreen
     },
     {
-        defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: Colors.primaryColor,
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-            },
-        },
+        defaultNavigationOptions: defaultNavStackOption
+    }
+);
+
+const FavNaivagtor = createStackNavigator(
+    {
+        Favorites: FavoritesScreen,
+        MealDetail: MealDetailScreen
+    },
+    {
+        defaultNavigationOptions: defaultNavStackOption
     }
 );
 
@@ -35,19 +49,9 @@ const MealsTabNavigator = createBottomTabNavigator(
     {
         Meals: {
             screen: MealsNavigator,
-            // navigationOptions: {
-            //     tabBarOptions: (tabInfo) => {
-            //         return <Ionicons name="ios-restaurant" size={24} color="black" />
-            //     }
-            // }
         },
         Favorites: {
-            screen: FavoritesScreen,
-            // navigationOptions: {
-            //     tabBarOptions: (tabInfo) => {
-            //         return <Ionicons name="ios-star" size={24} color="black" />
-            //     }
-            // }
+            screen: FavNaivagtor,
         },
     },
     {
@@ -57,13 +61,9 @@ const MealsTabNavigator = createBottomTabNavigator(
                 let IconComponent = Ionicons;
                 let iconName;
                 if (routeName === 'Meals') {
-                    console.log(focused);
                     iconName = focused
                         ? 'ios-restaurant'
-                        : 'ios-restaurant-outline';
-                    // Sometimes we want to add badges to some icons.
-                    // You can check the implementation below.
-                    // IconComponent = HomeIconWithBadge;
+                        : 'ios-restaurant';
                 } else if (routeName === 'Favorites') {
                     iconName = focused ? 'ios-star' : 'ios-star-outline';
                 }
@@ -80,4 +80,36 @@ const MealsTabNavigator = createBottomTabNavigator(
     }
 );
 
-export default createAppContainer(MealsTabNavigator);
+const FilterNavigator = createStackNavigator(
+    {
+        Filters: FiltersScreen
+    },
+    {
+        defaultNavigationOptions: defaultNavStackOption
+    }
+);
+
+const MainNavigator = createDrawerNavigator(
+    {
+        MealsFav: {
+            screen: MealsTabNavigator, navigationOptions: {
+                drawerLabel: 'Meals',
+            }
+        },
+        Filters: {
+            screen: FilterNavigator, navigationOptions: {
+                drawerLabel: 'Favorites',
+            }
+        }
+    }, 
+    {
+        contentOptions: {
+            activeTintColor: Colors.accentColor,
+            lableStyle: {
+                fontFamily: 'open-sens-bold'
+            }
+        }
+    }
+);
+
+export default createAppContainer(MainNavigator);

@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGridTile from '../components/CategoryGridTile';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function CategoriesScreen(props) {
 
@@ -20,8 +21,21 @@ export default function CategoriesScreen(props) {
     )
 }
 
-CategoriesScreen.navigationOptions = {
-    title: 'Meal Categories',
+CategoriesScreen.navigationOptions = navData => {
+    return {
+        headerTitle: 'Meal Categories',
+        headerLeft: () => (
+            <TouchableOpacity style={styles.burgerIcon} onPress={() => {
+                navData.navigation.toggleDrawer();
+            }}>
+                <FontAwesome
+                    name="bars"
+                    size={24}
+                    color="#fff"
+                />
+            </TouchableOpacity>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -30,5 +44,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    burgerIcon: {
+        paddingLeft: 10
+    }
 });
 
