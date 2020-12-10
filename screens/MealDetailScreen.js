@@ -1,19 +1,36 @@
 import React from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MEALS } from '../data/dummy-data';
 import { FontAwesome } from '@expo/vector-icons';
 
+const ListItem = (props) => {
+    return (
+        <View style={styles.listItem}>
+            <Text>{props.children}</Text>
+        </View>
+    );
+}
 export default function MealDetailScreen(props) {
     const mealId = props.navigation.getParam('mealId');
     const selectedMeal = MEALS.find(meal => meal.id === mealId);
+
     return (
-        <View style={styles.screen}>
-            <Text>{selectedMeal.title}</Text>
-            <Button
-                title="Go back"
-                onPress={() => props.navigation.goBack()}
-            />
-        </View>
+        <ScrollView>
+            <Image source={{uri: selectedMeal.imageUrl}} style={styles.image}/>
+            <View style={styles.detail}>
+                <Text>{selectedMeal.duration}m</Text>
+                <Text>{selectedMeal.complexity.toUpperCase()}</Text>
+                <Text>{selectedMeal.affordablity.toUpperCase()}</Text>
+            </View>
+            <Text style={styles.title}>Ingredient</Text>
+            {selectedMeal.ingredients.map(((ingredient, index) => (
+                <ListItem style={styles.ingredients} key={index}>{ingredient}</ListItem>
+            )))}
+            <Text style={styles.title}>Steps</Text>
+            {selectedMeal.steps.map(((step, index) => (
+                <ListItem style={styles.ingredients} key={index}>{step}</ListItem>
+            )))}
+        </ScrollView>
     )
 }
 
@@ -36,12 +53,30 @@ MealDetailScreen.navigationOptions = navigationData => {
 }
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    title: {
+        fontFamily: 'open-sens-bold',
+        fontSize: 22,
+        textAlign: 'center',
+        marginVertical: 10
+    },
+    image: {
+        width: '100%',
+        height: 200,
+    },
+    detail: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 15
     },
     starIcon: {
         paddingRight: 8
+    },
+    listItem: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 10,
+        fontFamily: 'open-sens',
     }
 });

@@ -19,8 +19,12 @@ const defaultNavStackOption = {
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
-        fontWeight: 'bold',
+        fontFamily: 'open-sens-bold',
     },
+    headerBackTitleStyle: {
+        fontFamily: 'open-sens',
+        fontSize: 14
+    }
 }
 const MealsNavigator = createStackNavigator(
     {
@@ -50,7 +54,7 @@ const MealsTabNavigator = createBottomTabNavigator(
         Meals: {
             screen: MealsNavigator,
         },
-        Favorites: {
+        Filter: {
             screen: FavNaivagtor,
         },
     },
