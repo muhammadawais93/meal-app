@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, View, Text, Button, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { MEALS } from '../data/dummy-data';
+import { useSelector } from 'react-redux';
 import { FontAwesome } from '@expo/vector-icons';
 
 const ListItem = (props) => {
@@ -11,12 +11,18 @@ const ListItem = (props) => {
     );
 }
 export default function MealDetailScreen(props) {
+    const availableMeals = useSelector(state => state.meals.meals);
+
     const mealId = props.navigation.getParam('mealId');
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
+    const selectedMeal = availableMeals.find(meal => meal.id === mealId);
+
+    useEffect(() => {
+        props.navigation.setParams({mealTitle: selectedMeal.title});
+    }, []);
 
     return (
         <ScrollView>
-            <Image source={{uri: selectedMeal.imageUrl}} style={styles.image}/>
+            <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
             <View style={styles.detail}>
                 <Text>{selectedMeal.duration}m</Text>
                 <Text>{selectedMeal.complexity.toUpperCase()}</Text>
@@ -35,11 +41,10 @@ export default function MealDetailScreen(props) {
 }
 
 MealDetailScreen.navigationOptions = navigationData => {
-    const mealId = navigationData.navigation.getParam('mealId');
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
+    const mealTitle = navigationData.navigation.getParam('mealTitle');
 
     return {
-        headerTitle: selectedMeal.title,
+        headerTitle: mealTitle,
         headerRight: () => (
             <TouchableOpacity style={styles.starIcon} onPress={() => { }}>
                 <FontAwesome

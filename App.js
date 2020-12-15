@@ -5,7 +5,7 @@ import { AppLoading } from 'expo';
 import MealsNavigator from './naviation/MealsNavigator';
 import { enableScreens } from 'react-native-screens';
 import { createStore, combineReducers } from 'redux';
-import mealsReducer from './store/reducers/meals';
+import mealsReducer from './store/reducers/mealsReducer';
 import { Provider } from 'react-redux';
 
 enableScreens();

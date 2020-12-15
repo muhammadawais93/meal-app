@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import MealList from '../components/MealList';
-import { MEALS } from '../data/dummy-data';
 import { FontAwesome } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 export default function FavoritesScreen(props) {
-    const favMeal = MEALS.filter(meal => meal.id === 'm1' || meal.id === 'm2');
+    const favMeal = useSelector(state => state.meals.favoritesMeals);
     return (
         <MealList listData={favMeal} navigation={props.navigation} />
     )
